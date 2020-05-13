@@ -13,7 +13,6 @@ try {
         console.log('Ready');
 } catch {
         console.log('Failed');
-        // its sigh g
 }
 
 function generateUrl(filename) {
@@ -27,7 +26,7 @@ client.on('message', async message => {
   if (!message.guild) return;
 
   let command = message.content.split(' ')[0];
-  let soundbyte = message.content.split(' ')[1];
+  let param = message.content.split(' ')[1];
 
   if (command === '//play') {
     console.log(`${chalk.blue(message.content)} command issued by ${chalk.yellow(message.author.username)}`);
@@ -36,7 +35,7 @@ client.on('message', async message => {
     if (message.member.voice.channel) {
                 var currentChannel = message.member.voice.channel;
                 const connection = await currentChannel.join();
-                connection.play(generateUrl(soundbyte));
+                connection.play(generateUrl(param));
                 //var connection = await message.member.voice.channel.leave();
 
     } else {
@@ -47,7 +46,7 @@ client.on('message', async message => {
     message.reply(`Available soundbytes are: ${soundbytes.join(', ')}`);
   } else if (command === '//addrole') {
     message.guild.roles.create({
-      data: { name: 'Lears', color: 'purple' }, reason: 'Command addrole executed'
+      data: { name: param, color: 'purple' }, reason: 'Command addrole executed'
     })
       .then(console.log).catch(console.error); 
   } 
