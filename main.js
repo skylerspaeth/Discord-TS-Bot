@@ -50,7 +50,6 @@ client.on('message', async message => {
     })
       .then(console.log).catch(console.error); 
   } 
-
 });
 
 
@@ -62,4 +61,4 @@ client.on('message', async message => {
              Guild.createRole("TS Holder");
              Guild.createRole("TS Muted");
         }
-*/
+*/ 
