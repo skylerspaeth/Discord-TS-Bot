@@ -55,10 +55,11 @@ client.on('message', async message => {
 
 
 
-// Pseudo code
+/* Pseudo code
 
-        // if (!(Guild.hasRole("TS Controller"))) {
-        //      Guild.createRole("TS Controller");
-        //      Guild.createRole("TS Holder");
-        //      Guild.createRole("TS Muted");
-        // }
+        if (!(Guild.hasRole("TS Controller"))) {
+             Guild.createRole("TS Controller");
+             Guild.createRole("TS Holder");
+             Guild.createRole("TS Muted");
+        }
+*/
