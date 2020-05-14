@@ -24,17 +24,23 @@ client.on('message', async message => {
   
   if (!message.guild) return;
 
-  let prefix = "???";
+  let prefix = "//";
   let prefixLen = prefix.length;
 
   if (message.content.substring(0,prefixLen) === prefix) {
-    console.log("YEET");
-    console.log(message.content.substring(0,prefixLen));
+    console.log("Prefix of command executed: " + message.content.substring(0,prefixLen));
   }
-  let command = message.content.split(prefix)[1];
-  let param = message.content.split(' ')[1];
+  // let command = message.content.split(prefix)[1];
+  let fPre = message.content.split(prefix)[1];
+  // fPre should be "display avatar"
+  console.log("fPre: " + fPre);
+  let command = fPre.split(' ')[0];
+  console.log("Command: " + command);
+  let arg1 = message.content.split(' ')[1];
+  console.log(arg1);
+// command should be [//, *display*, avatar]
 
-  if (command === 'display' && param === "avatar") {
+  if (command === 'display' && arg1 === "avatar") {
     // Send the user's avatar URL
     message.reply(message.author.displayAvatarURL());
   }
@@ -46,7 +52,7 @@ client.on('message', async message => {
     if (message.member.voice.channel) {
       var currentChannel = message.member.voice.channel;
       const connection = await currentChannel.join();
-      connection.play(generateUrl(param));
+      connection.play(generateUrl(arg1));
       // var connection = await message.member.voice.channel.leave();
   
     } else { message.reply('You need to join a voice channel first!'); }
@@ -57,7 +63,7 @@ client.on('message', async message => {
   } else if (command === 'addrole') {
     message.guild.roles.create({
       data: {
-         name: param,
+         name: arg1,
          color: 'purple' 
       }, reason: 'Command addrole executed'
     })
