@@ -5,7 +5,7 @@ const chalk = require('chalk');
 const {token} = require('./config.json');
 
 const soundbytes = ["boi", "cringingme", "earrape", "evan", "everyword", "fam", "getout", "hacking", "idk", "instruments", "kys", "mom", "nsfw", "portal2", "smiling", "spam", "sparticus", "trigger", "water", "wetalked"];
-
+const commands = ["play", "display", "sounds", "addrole", "leave"];
 
 try {
   client.login(token);
@@ -23,53 +23,50 @@ client.on('message', async message => {
   // Voice only works in guilds, if the message does not come from a guild, then ignore
   
   if (!message.guild) return;
-
-  let prefix = "//";
+  var defaultPrefix = "//";
+  let prefix = defaultPrefix;
   let prefixLen = prefix.length;
 
   if (message.content.substring(0,prefixLen) === prefix) {
-    console.log("Prefix of command executed: " + message.content.substring(0,prefixLen));
-  }
-  // let command = message.content.split(prefix)[1];
-  let fPre = message.content.split(prefix)[1];
-  // fPre should be "display avatar"
-  console.log("fPre: " + fPre);
-  let command = fPre.split(' ')[0];
-  console.log("Command: " + command);
-  let arg1 = message.content.split(' ')[1];
-  console.log(arg1);
-// command should be [//, *display*, avatar]
+    let command = message.content.split(prefix)[1].split(' ')[0];
+    let arg1 = message.content.split(' ')[1];
+    let arg2 = message.content.split(' ')[2];
 
-  if (command === 'display' && arg1 === "avatar") {
-    // Send the user's avatar URL
-    message.reply(message.author.displayAvatarURL());
-  }
+    // Check to see if command is valid
+    if (commands.includes(command)) {
+      console.log(`${chalk.green(message.content)} command issued by ${chalk.yellow(message.author.username)}#${chalk.yellow(message.author.discriminator)}`);
+    } else {
+      console.log('Invalid command issued')
+    }
 
-  if (command === 'play') {
-    console.log(`${chalk.blue(message.content)} command issued by ${chalk.yellow(message.author.username)}#${chalk.yellow(message.author.discriminator)}`);
-  
-    // Only try to join the sender's voice channel if they are in one themselves
-    if (message.member.voice.channel) {
-      var currentChannel = message.member.voice.channel;
-      const connection = await currentChannel.join();
-      connection.play(generateUrl(arg1));
-      // var connection = await message.member.voice.channel.leave();
-  
-    } else { message.reply('You need to join a voice channel first!'); }
-    
-  } else if (command === 'sounds') {
-    console.log(`${chalk.green(message.content)} command issued by ${chalk.yellow(message.author.username)}#${chalk.yellow(message.author.discriminator)}`);
-    message.reply(`Available soundbytes are: ${soundbytes.join(', ')}`);
-  } else if (command === 'addrole') {
-    message.guild.roles.create({
-      data: {
-         name: arg1,
-         color: 'purple' 
-      }, reason: 'Command addrole executed'
-    })
-      .then(console.log).catch(console.error); 
-  } else if (command === 'ts') {
-    
+    if (command === 'display' && arg1 === "avatar") {
+      // Send the user's avatar URL
+      message.reply(message.author.displayAvatarURL());
+    }
+
+    if (command === 'play') {
+      // Only try to join the sender's voice channel if they are in one themselves
+      if (message.member.voice.channel) {
+        var currentChannel = message.member.voice.channel;
+        const connection = await currentChannel.join();
+        connection.play(generateUrl(arg1));
+      } else { message.reply('You need to join a voice channel first!'); }
+      
+    } else if (command === 'sounds') {
+      message.reply(`Available soundbytes are: ${soundbytes.join(', ')}`);
+    } else if (command === 'addrole') {
+      message.guild.roles.create({
+        data: {
+          name: arg1,
+          color: 'purple' 
+        }, reason: 'Command addrole executed'
+      })
+        .then(console.log).catch(console.error); 
+    } else if (command === 'ts') {
+      console.log('talking stick logic goes here');
+    } else if (command === 'leave') {
+      connection = await message.member.voice.channel.leave();
+    }
   }
 });
 
