@@ -4,7 +4,7 @@ const client = new Discord.Client();
 const chalk = require('chalk');
 const {token} = require('./config.json');
 
-const soundbytes = ["boi", "cringingme", "earrape", "evan", "everyword", "fam", "getout", "hacking", "idk", "instruments", "kys", "mom", "nsfw", "portal2", "smiling", "spam", "sparticus", "trigger", "water", "wetalked"];
+const soundboard = ["boi", "cringingme", "earrape", "evan", "everyword", "fam", "getout", "hacking", "idk", "instruments", "kys", "mom", "nsfw", "portal2", "smiling", "spam", "sparticus", "trigger", "water", "wetalked"];
 const commands = ["play", "display", "sounds", "addrole", "leave", "ts", "help"];
 
 try {
@@ -53,7 +53,7 @@ client.on('message', async message => {
         break;
         
       case 'sounds':
-        message.reply(`Available soundbytes are: ${soundbytes.join(', ')}`);
+        message.reply(`Available soundboard options are: ${soundboard.join(', ')}`);
         break;
       
       case 'addrole':
@@ -66,32 +66,15 @@ client.on('message', async message => {
         break;
 
       case 'ts':
-        // console.log('talking stick logic goes here');
-        
-        // let channel = message.member.voiceChannel;
-        // for (let [memberID, member] of channel.members) {
-        //     member[1].setMute(true)
-
-        // if (message.member.permissions.missing('ADMINISTRATOR')) console.log("you are not an admin"); break;
-        // console.log("you are an admin");
-
-        //const channels = message.guild.channels.cache.filter(c => c.parentID === '709946649257967638' && c.type === 'voice');
-        // console.log(channels);
-
         if (message.member.voice.channel) {
-          const channel = message.guild.channels.cache.get(message.member.voice.channel.id);
+          let channel = message.guild.channels.cache.get(message.member.voice.channel.id);
           for (const [memberID, member] of channel.members) {
-              //member.voice.setChannel('347844679074709506')
-              member.voice.setMute(true);
-              message.member.voice.setMute(false);
-              //.then(() => console.log(`Moved ${member.user.tag}.`))
-              //.catch(console.error);
-            } 
+            if (member != message.member)
+               member.voice.setMute(true);
+          }
         } else {
           message.reply('You need to join a voice channel first!');
         }      
-        
-      
         break;
 
       case 'leave':
@@ -107,6 +90,15 @@ client.on('message', async message => {
         
       case 'help':
         message.author.send(`This is a placeholder for help, ${message.author.username}.`);
+        break;
+      
+      case 'tsl':
+        if (message.member.voice.channel) {
+          let channel = message.guild.channels.cache.get(message.member.voice.channel.id);
+          for (const [memberID, member] of channel.members) {
+            member.voice.setMute(false);
+          }
+        }
         break;
 
       default:
