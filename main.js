@@ -167,10 +167,10 @@ for (const [channelID, channel] of channels) {
 
 /*To Do
         Incorporate permissions in roles: In Progress
+        Develop the ability to pass the talking stick
         Set master role for moderators to override the bot's muting, as well as who has the talking stick
-        For each iterate mute active voice channel except for message.author
         Allow the original message.author pass the Talking role to another member of the current voice channel
-        Auto add and remove roles as users join and leave the applied voice channel
+        Change the talking stick from muting everyone to  changing the channel permissions, but adding the sender to a role that allows them to speak
         Record Audio
         Allow users to set marks in the audio with a command, and allow custom names on these markings
         Play YouTube URLs
