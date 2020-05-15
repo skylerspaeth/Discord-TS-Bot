@@ -106,6 +106,7 @@ client.on('message', async message => {
           }
         } else {
           message.reply('You do not have permission to do this.');
+        }
         break;
 
       default:
