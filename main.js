@@ -104,7 +104,8 @@ client.on('message', async message => {
               member.voice.setMute(false);
             }
           }
-        }
+        } else {
+          message.reply('You do not have permission to do this.');
         break;
 
       default:
