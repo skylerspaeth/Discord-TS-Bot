@@ -4,7 +4,7 @@ const client = new Discord.Client();
 const chalk = require('chalk');
 const {token} = require('./config.json');
 
-const soundbytes = ["boi", "cringingme", "earrape", "evan", "everyword", "fam", "getout", "hacking", "idk", "instruments", "kys", "mom", "nsfw", "portal2", "smiling", "spam", "sparticus", "trigger", "water", "wetalked"];
+const soundboard = ["cbt", "boi", "cringingme", "earrape", "evan", "everyword", "fam", "getout", "hacking", "idk", "instruments", "kys", "mom", "nsfw", "portal2", "smiling", "spam", "sparticus", "trigger", "water", "wetalked"];
 const commands = ["play", "display", "sounds", "addrole", "leave", "ts", "help"];
 
 try {
@@ -15,8 +15,8 @@ try {
 }
 
 function generateUrl(filename) {
-  
-	return url;
+  let url = (filename === 'cbt') ? 'https://upload.wikimedia.org/wikipedia/commons/0/06/CocknBallTorture2.oga' : `http://skylerspaeth.com/jon_sbd/clips/${filename}.m4a`;
+  return url;
 }
 
 client.on('message', async message => {
@@ -53,7 +53,7 @@ client.on('message', async message => {
         break;
         
       case 'sounds':
-        message.reply(`Available soundbytes are: ${soundbytes.join(', ')}`);
+        message.reply(`Available soundboard options are: ${soundboard.join(', ')}`);
         break;
       
       case 'addrole':
@@ -66,32 +66,19 @@ client.on('message', async message => {
         break;
 
       case 'ts':
-        // console.log('talking stick logic goes here');
-        
-        // let channel = message.member.voiceChannel;
-        // for (let [memberID, member] of channel.members) {
-        //     member[1].setMute(true)
-
-        // if (message.member.permissions.missing('ADMINISTRATOR')) console.log("you are not an admin"); break;
-        // console.log("you are an admin");
-
-        //const channels = message.guild.channels.cache.filter(c => c.parentID === '709946649257967638' && c.type === 'voice');
-        // console.log(channels);
-
-        if (message.member.voice.channel) {
-          const channel = message.guild.channels.cache.get(message.member.voice.channel.id);
-          for (const [memberID, member] of channel.members) {
-              //member.voice.setChannel('347844679074709506')
-              member.voice.setMute(true);
-              message.member.voice.setMute(false);
-              //.then(() => console.log(`Moved ${member.user.tag}.`))
-              //.catch(console.error);
-            } 
+        if (message.member.roles.cache.some(r => r.name === 'TalkingStickController')) {
+          if (message.member.voice.channel) {
+            let channel = message.guild.channels.cache.get(message.member.voice.channel.id);
+            for (const [memberID, member] of channel.members) {
+              if (member != message.member)
+                member.voice.setMute(true);
+            }
+          } else {
+            message.reply('You need to join a voice channel first!');
+          }
         } else {
-          message.reply('You need to join a voice channel first!');
-        }      
-        
-      
+          message.reply('You do not have permission to do this.');
+        } 
         break;
 
       case 'leave':
@@ -107,6 +94,17 @@ client.on('message', async message => {
         
       case 'help':
         message.author.send(`This is a placeholder for help, ${message.author.username}.`);
+        break;
+      
+      case 'tsl':
+        if (message.member.roles.cache.some(r => r.name === 'TalkingStickController')) {
+          if (message.member.voice.channel) {
+            let channel = message.guild.channels.cache.get(message.member.voice.channel.id);
+            for (const [memberID, member] of channel.members) {
+              member.voice.setMute(false);
+            }
+          }
+        }
         break;
 
       default:
@@ -166,7 +164,7 @@ for (const [channelID, channel] of channels) {
 
 
 /*To Do
-        Incorporate permissions in roles
+        Incorporate permissions in roles: In Progress
         Set master role for moderators to override the bot's muting, as well as who has the talking stick
         For each iterate mute active voice channel except for message.author
         Allow the original message.author pass the Talking role to another member of the current voice channel
@@ -174,4 +172,6 @@ for (const [channelID, channel] of channels) {
         Record Audio
         Allow users to set marks in the audio with a command, and allow custom names on these markings
         Play YouTube URLs
+        Delete most messages sent by bot after 10 seconds
+        Allow Admins to administer the TSC role 
 */
