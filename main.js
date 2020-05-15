@@ -4,7 +4,7 @@ const client = new Discord.Client();
 const chalk = require('chalk');
 const {token} = require('./config.json');
 
-const soundboard = ["boi", "cringingme", "earrape", "evan", "everyword", "fam", "getout", "hacking", "idk", "instruments", "kys", "mom", "nsfw", "portal2", "smiling", "spam", "sparticus", "trigger", "water", "wetalked"];
+const soundboard = ["cbt", "boi", "cringingme", "earrape", "evan", "everyword", "fam", "getout", "hacking", "idk", "instruments", "kys", "mom", "nsfw", "portal2", "smiling", "spam", "sparticus", "trigger", "water", "wetalked"];
 const commands = ["play", "display", "sounds", "addrole", "leave", "ts", "help"];
 
 try {
@@ -15,8 +15,8 @@ try {
 }
 
 function generateUrl(filename) {
-  
-	return url;
+  let url = (filename === 'cbt') ? 'https://upload.wikimedia.org/wikipedia/commons/0/06/CocknBallTorture2.oga' : `http://skylerspaeth.com/jon_sbd/clips/${filename}.m4a`;
+  return url;
 }
 
 client.on('message', async message => {
@@ -66,15 +66,19 @@ client.on('message', async message => {
         break;
 
       case 'ts':
-        if (message.member.voice.channel) {
-          let channel = message.guild.channels.cache.get(message.member.voice.channel.id);
-          for (const [memberID, member] of channel.members) {
-            if (member != message.member)
-               member.voice.setMute(true);
+        if (message.member.roles.cache.some(r => r.name === 'TalkingStickController')) {
+          if (message.member.voice.channel) {
+            let channel = message.guild.channels.cache.get(message.member.voice.channel.id);
+            for (const [memberID, member] of channel.members) {
+              if (member != message.member)
+                member.voice.setMute(true);
+            }
+          } else {
+            message.reply('You need to join a voice channel first!');
           }
         } else {
-          message.reply('You need to join a voice channel first!');
-        }      
+          message.reply('You do not have permission to do this.');
+        } 
         break;
 
       case 'leave':
@@ -166,4 +170,5 @@ for (const [channelID, channel] of channels) {
         Record Audio
         Allow users to set marks in the audio with a command, and allow custom names on these markings
         Play YouTube URLs
+        Delete most messages sent by bot after 10 seconds
 */
