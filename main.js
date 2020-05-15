@@ -175,8 +175,5 @@ for (const [channelID, channel] of channels) {
         Allow users to set marks in the audio with a command, and allow custom names on these markings
         Play YouTube URLs
         Delete most messages sent by bot after 10 seconds
-<<<<<<< HEAD
         Allow Admins to administer the TSC role 
-=======
->>>>>>> bd525357ba53a9eb02ebecfb922945e05f150585
 */
